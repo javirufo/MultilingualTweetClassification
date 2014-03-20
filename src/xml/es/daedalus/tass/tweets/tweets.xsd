@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="http://www.daedalus.es/TASS/tweets" 
+ elementFormDefault="qualified" 
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+ xmlns:tt="http://www.daedalus.es/TASS/tweets">
+ 
+<xsd:simpleType name="enumValuePolarity">
+  <xsd:restriction base="xsd:string">
+	<xsd:enumeration value="NONE"/>
+	<xsd:enumeration value="N+"/>
+	<xsd:enumeration value="N"/>
+	<xsd:enumeration value="NEU"/>	
+	<xsd:enumeration value="P"/>
+	<xsd:enumeration value="P+"/>
+  </xsd:restriction>
+</xsd:simpleType>
+ 
+<xsd:simpleType name="enumTypePolarity">
+  <xsd:restriction base="xsd:string">
+	<xsd:enumeration value="AGREEMENT"/>
+	<xsd:enumeration value="DISAGREEMENT"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+ <!-- typePolatity complexType definition -->
+ <xsd:complexType name="typePolarity">
+	<xsd:sequence>
+		<xsd:element name="entity" type="xsd:string" minOccurs="0" />
+		<xsd:element name="value" type="tt:enumValuePolarity" />
+		<xsd:element name="type" type="tt:enumTypePolarity" minOccurs="0" />
+	</xsd:sequence>
+ </xsd:complexType>
+ 
+ <!-- sentiments definition-->
+<xsd:element name="sentiments">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element name="polarity" type="tt:typePolarity" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+ <!-- topics definition-->
+<xsd:element name="topics">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element name="topic" type="xsd:string" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+	
+<xsd:element name="tweet">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element name="tweetid" type="xsd:nonNegativeInteger" />
+			<xsd:element name="user" type="xsd:string" />
+			<xsd:element name="content" type="xsd:string" />			
+			<xsd:element name="date" type="xsd:string" />
+			<xsd:element name="lang" type="xsd:language" />
+			<xsd:element ref="tt:sentiments" minOccurs="0" />
+			<xsd:element ref="tt:topics" minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+</xsd:element>
+
+<!-- users definition-->
+<xsd:element name="tweets">
+	<xsd:complexType>
+		<xsd:sequence>
+			<xsd:element ref="tt:tweet" minOccurs="1" maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:key name="keyTwits">
+		<xsd:selector xpath=".//tt:tweet" />
+		<xsd:field xpath="tt:tweetid" />
+	</xsd:key>
+	
+</xsd:element>
+
+</xsd:schema>

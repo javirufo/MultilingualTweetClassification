@@ -1,0 +1,7 @@
+extracturls=true
+extracthashtags=true
+extractusers=true
+extractuserinfo=true
+stemming=false
+removerepatedchars=true
+removeemoticons=true
